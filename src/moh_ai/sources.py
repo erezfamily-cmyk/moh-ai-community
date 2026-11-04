@@ -217,9 +217,10 @@ def parse_source(text, kind, title='', url=None, published_at=None):
         basis = 'description_only'
     # A video landing page is not the video's spoken or visual content.
     host = urlsplit(canonical).hostname if canonical else ''
-    path = urlsplit(canonical).path if canonical else ''
-    if kind == 'html' and (host in {'youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'}
-                           and (host == 'youtu.be' or path.startswith(('/watch', '/shorts/')))):
+    landing_host = any(host == domain or host.endswith('.' + domain) for domain in
+                       ('youtube.com', 'youtu.be', 'instagram.com', 'facebook.com', 'tiktok.com',
+                        'x.com', 'twitter.com', 'linkedin.com', 'vimeo.com'))
+    if kind == 'html' and landing_host:
         basis = 'description_only'
     content = _clean(text)
     status = 'accessible' if content else ('needs_transcript' if basis == 'transcript' else 'blocked')
@@ -238,7 +239,7 @@ def parse_source(text, kind, title='', url=None, published_at=None):
                                 if basis == 'description_only' else [])}
 
 
-def fetch_source(url, timeout=10, max_bytes=MAX_BYTES):
+def fetch_document(url, timeout=10, max_bytes=MAX_BYTES):
     """Fetch a public HTTPS source; redirects/DNS are revalidated and IP-pinned.
 
     No proxies, credentials, cookies, paid APIs or automatic video downloads.
@@ -260,7 +261,7 @@ def fetch_source(url, timeout=10, max_bytes=MAX_BYTES):
             parts = urlsplit(canonical)
             target = parts.path + ('?' + parts.query if parts.query else '')
             conn.request('GET', target, headers={'Host': parts.netloc, 'User-Agent': 'MohAI/0.1 (+public-source-reader)',
-                                               'Accept-Encoding': 'identity', 'Accept': 'text/html,text/plain,text/vtt'})
+                                               'Accept-Encoding': 'identity', 'Accept': 'text/html,text/plain,text/vtt,application/rss+xml,application/atom+xml,application/xml,text/xml'})
             response = conn.getresponse()
             if response.status in {301, 302, 303, 307, 308}:
                 location = response.getheader('Location')
@@ -273,7 +274,7 @@ def fetch_source(url, timeout=10, max_bytes=MAX_BYTES):
             if response.getheader('Content-Encoding', 'identity').lower() not in {'', 'identity'}:
                 raise SourceError('Compressed source responses are not supported')
             mime = response.getheader('Content-Type', '').split(';', 1)[0].strip().lower()
-            if mime not in {'text/html', 'application/xhtml+xml', 'text/plain', 'text/vtt', 'application/x-subrip'}:
+            if mime not in {'text/html', 'application/xhtml+xml', 'text/plain', 'text/vtt', 'application/x-subrip', 'application/rss+xml', 'application/atom+xml', 'application/xml', 'text/xml'}:
                 raise SourceError('Unsupported source content type')
             declared = response.getheader('Content-Length')
             if declared:
@@ -302,12 +303,22 @@ def fetch_source(url, timeout=10, max_bytes=MAX_BYTES):
                 text = b''.join(chunks).decode(encoding)
             except (UnicodeError, LookupError) as exc:
                 raise SourceError('Source response is not decodable text') from exc
-            kind = 'html' if mime in {'text/html', 'application/xhtml+xml'} else ('vtt' if mime == 'text/vtt' else 'srt' if mime == 'application/x-subrip' else 'article')
-            result = parse_source(text, kind, url=canonical)
-            result['requested_url'] = url
-            return result
+            return {'text': text, 'mime': mime, 'canonical_url': canonical, 'requested_url': url}
         except (OSError, http.client.HTTPException) as exc:
             raise SourceError('Source network request failed') from exc
         finally:
             conn.close()
     raise SourceError('Excessive source redirects')
+
+
+def fetch_source(url, timeout=10, max_bytes=MAX_BYTES):
+    """Parse a fetched document as evidence; XML feeds use fetch_document directly."""
+    document = fetch_document(url, timeout, max_bytes)
+    mime = document['mime']
+    if mime in {'application/rss+xml', 'application/atom+xml', 'application/xml', 'text/xml'}:
+        raise SourceError('Feed XML is not article evidence; use daily collection')
+    kind = ('html' if mime in {'text/html', 'application/xhtml+xml'} else
+            'vtt' if mime == 'text/vtt' else 'srt' if mime == 'application/x-subrip' else 'article')
+    result = parse_source(document['text'], kind, url=document['canonical_url'])
+    result['requested_url'] = url
+    return result
