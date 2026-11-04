@@ -1,0 +1,29 @@
+{
+  "reviewer": "Codex subagent content_critic; moh-ai-editor manually loaded and applied in this subagent session",
+  "review_type": "ai_session",
+  "blocking": false,
+  "findings": [
+    {
+      "severity": "info",
+      "finding": "הפתיח מתאר מצב אפשרי בלי לקבוע שהכלי חסר הקשר תמיד."
+    },
+    {
+      "severity": "info",
+      "finding": "נוספו הסבר קצר לפרומפט, דוגמה מקורית לבקשת המשך וקישור לחיץ. הדוגמאות הן המחשה מקורית ולא ציטוט מהמקור או תוצאת ניסוי."
+    },
+    {
+      "severity": "info",
+      "finding": "ההמלצות המהותיות ממופות ל־C1 ול־C2; אין הבטחה לתשובה נכונה או לשיפור ודאי."
+    },
+    {
+      "severity": "info",
+      "finding": "ציון הקול זמני ומשקף בהירות כללית בלבד, ולא חיקוי קול אישי שנלמד."
+    }
+  ],
+  "scores": {
+    "accuracy": 5,
+    "clarity": 5,
+    "usefulness": 5,
+    "voice": 4
+  }
+}

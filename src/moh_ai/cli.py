@@ -1,4 +1,4 @@
-"""Offline-only foundation; no model calls or network fetching."""
+"""Local workbench CLI. No model API calls; HTTPS fetch is explicit."""
 import argparse
 import hashlib
 import json
@@ -72,12 +72,12 @@ def doctor() -> dict:
             "git": bool(shutil.which("git")), "ffmpeg": bool(shutil.which("ffmpeg")),
             "timezone": "Asia/Jerusalem", "timezone_status": tz_status,
             "strict_free": True, "model_mode": "manual",
-            "network_fetch": "not_implemented", "generation": "not_implemented",
+            "network_fetch": "explicit_public_https", "generation": "not_implemented",
             "note": "No credentials are read and no model or network calls are made."}
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="Moh AI offline project foundation")
+    parser = argparse.ArgumentParser(description="Moh AI local editorial workbench")
     parser.add_argument("--data-dir", type=Path,
                         default=Path(os.environ.get("MOH_AI_DATA_DIR", "data")))
     sub = parser.add_subparsers(dest="command", required=True)
@@ -87,6 +87,35 @@ def main(argv=None) -> int:
     ingest.add_argument("--file", required=True, type=Path)
     ingest.add_argument("--title", required=True)
     ingest.add_argument("--kind", choices=["text", "transcript"], default="text")
+    web = sub.add_parser("serve", help="Open loopback-only Hebrew editorial workbench")
+    web.add_argument("--port", type=int, default=8765)
+    source = sub.add_parser("source", help="Parse local text, HTML, VTT or SRT into source record")
+    source.add_argument("--file", type=Path, required=True)
+    source.add_argument("--kind", choices=["text","article","html","transcript","vtt","srt","description"], default="text")
+    source.add_argument("--title", default="")
+    source.add_argument("--url")
+    fetch = sub.add_parser("fetch", help="Explicitly fetch one public HTTPS text source")
+    fetch.add_argument("--url", required=True)
+    pack = sub.add_parser("import-pack", help="Import evidence pack JSON with traceable claims")
+    pack.add_argument("--file", type=Path, required=True)
+    brief = sub.add_parser("brief", help="Prepare a writing brief without generating a post")
+    brief.add_argument("--source-id", required=True)
+    draft = sub.add_parser("add-draft", help="Import a manually/session-assisted written draft")
+    draft.add_argument("--source-id", required=True)
+    draft.add_argument("--file", type=Path, required=True)
+    draft.add_argument("--mappings", type=Path, required=True)
+    review = sub.add_parser("review", help="Import an explicitly attributed review report")
+    review.add_argument("--draft-id", required=True)
+    review.add_argument("--file", type=Path, required=True)
+    export = sub.add_parser("export", help="Export draft ZIP; final export needs UI approval")
+    export.add_argument("--draft-id", required=True)
+    export.add_argument("--output", required=True, type=Path)
+    export.add_argument("--final", action="store_true")
+    sub.add_parser("pilot", help="Load the real assisted pilot with reviews, never auto-approve")
+    image = sub.add_parser("render-image", help="Render an explanatory PNG locally (optional Pillow+RAQM)")
+    image.add_argument("--draft-id", required=True)
+    image.add_argument("--output", required=True, type=Path)
+    image.add_argument("--font")
     args = parser.parse_args(argv)
     try:
         if args.command == "doctor":
@@ -95,9 +124,43 @@ def main(argv=None) -> int:
             conn = connect_db(args.data_dir / "moh-ai.sqlite3")
             conn.close()
             result = {"status": "initialized", "scope": "imports_foundation_only"}
-        else:
+        elif args.command == "ingest":
             result = import_text(args.data_dir / "moh-ai.sqlite3", args.file,
                                  args.title, args.kind)
+        else:
+            from . import editorial
+            db = args.data_dir / "moh-ai.sqlite3"
+            if args.command == "serve":
+                from .web import serve
+                serve(db,args.port)
+                return 0
+            elif args.command == "source":
+                from .sources import parse_source
+                result = parse_source(args.file.read_text(encoding="utf-8"),args.kind,title=args.title,url=args.url)
+            elif args.command == "fetch":
+                from .sources import fetch_source
+                result = fetch_source(args.url)
+            elif args.command == "import-pack":
+                result = editorial.save_pack(db,json.loads(args.file.read_text(encoding="utf-8")))
+            elif args.command == "brief":
+                result = editorial.make_brief(db,args.source_id)
+            elif args.command == "add-draft":
+                result = editorial.save_draft(db,args.source_id,args.file.read_text(encoding="utf-8"),json.loads(args.mappings.read_text(encoding="utf-8")))
+            elif args.command == "review":
+                result = editorial.record_review(db,args.draft_id,json.loads(args.file.read_text(encoding="utf-8")))
+            elif args.command == "export":
+                output = editorial.export_bundle(db,args.draft_id,args.final)
+                args.output.parent.mkdir(parents=True,exist_ok=True)
+                args.output.write_bytes(output)
+                result = {"path":str(args.output),"status":"exported","final":args.final}
+            elif args.command == "pilot":
+                from .pilot import load_pilot
+                result = load_pilot(db)
+            elif args.command == "render-image":
+                from .media import render_png
+                d = editorial.get_draft(db,args.draft_id)
+                pack = editorial.get_pack(db,d["source_id"])
+                result = render_png(pack["source"]["title"],d["body"],args.output,args.font)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
     except (ValueError, OSError, sqlite3.Error) as exc:

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "moh-ai-community"
-version = "0.0.1"
+version = "0.1.0"
 description = "Local-first foundation for the Moh AI editorial workspace"
 requires-python = ">=3.11"
 dependencies = []
@@ -14,3 +14,9 @@ moh-ai = "moh_ai.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+moh_ai = ["static/*.html", "static/*.css", "static/*.js"]
+
+[project.optional-dependencies]
+media = ["Pillow>=10"]

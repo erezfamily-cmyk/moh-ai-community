@@ -10,10 +10,10 @@
 | E04 | 3 | [SUPER_PROMPT](../prompts/SUPER_PROMPT.md) | נוסח קיים; השפעתו על תוצר אמיתי טרם נבדקה |
 | E05 | 3 | [AGENT_SYSTEM](../docs/AGENT_SYSTEM.md) | תכנון חלוקת תפקידים; אין הוכחת הפעלת שמונה סאב־אייג׳נטים |
 | E06 | 4 | [קוד](../src/moh_ai/cli.py) + [commit התשתית](https://github.com/erezfamily-cmyk/moh-ai-community/commit/77457324abcdfb27ff2976f1d02cc96d80b9601f) | שלד שנשמר; לא מערכת יצירת תוכן מלאה |
-| E07 | 4 | [MCP_AND_SKILLS](../docs/MCP_AND_SKILLS.md) | הוראות בלבד; חסרות קריאת MCP חיצוני והפעלת סקיל בפועל |
-| E08 | 4 | פוסט + PNG/MP4 | טרם הופק; אין קישור לתוצר אמיתי |
+| E07 | 4 | [ראיות חיבורים וסקיל](../pilot/01-clear-request/integrations.md) | הופעלו בסשן העבודה; בעורך המקומי עוד לא נבדקו |
+| E08 | 4 | [פוסט ותמונה](../pilot/01-clear-request/README.md) | פיילוט אמיתי הוכן; MP4 עדיין לא הופק |
 | E09 | 5 | [FOUNDATION_CHECKS](../docs/FOUNDATION_CHECKS.md) | בדיקות תוכנה שבוצעו; אינן ביקורת תוכן ותיקון |
-| E10 | 5 | [REVIEW_AND_REVISION](../templates/REVIEW_AND_REVISION.md) | תבנית בלבד; נדרשות v1, ביקורת אמיתית, v2 ושינוי מוסבר |
+| E10 | 5 | [ביקורת ותיקון בפועל](../pilot/01-clear-request/review.md) | v1, ביקורת AI ו־v2 עם שיפורים ממשיים; לא אישור עמית |
 
 ## רישום ראיה חדשה
 
@@ -41,3 +41,11 @@
 | כמות תיקונים מהותיים | לא נמדד | לא נמדד | ספירת שינויי אמת בגרסאות |
 
 לא משנים ערכים בלי מדידה ולא מוסיפים משוב בשם המנחה.
+
+## ראיות שנוספו ביישום הראשון
+
+E11 — [תיק מקור אמיתי](../pilot/01-clear-request/evidence.json), כולל blob של המקור ותאריך פרסום לא ידוע.
+
+E12 — [40 בדיקות תוכנה ותוצאות אמת](../docs/IMPLEMENTATION_TESTS.md); בדיקות HTTP אינן בדיקות browser.
+
+E13 — [ממשק מקומי והוראות](../docs/WORKBENCH_QUICKSTART.md).

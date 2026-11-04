@@ -1,0 +1,14 @@
+interface:
+  display_name: עורך התוכן של מוח AI
+  short_description: הפיכת מקורות אמינים לפוסט עברי ברור לקהילה
+  default_prompt: Use $moh-ai-editor to turn this source into a clear Hebrew community
+    post with evidence and review.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

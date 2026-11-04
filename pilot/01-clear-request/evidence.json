@@ -1,0 +1,30 @@
+{
+  "source": {
+    "title": "בקשה ברורה ל־AI",
+    "url": "https://github.com/openai/openai-cookbook/blob/main/examples/chatgpt/chatgpt_prompt_guide/chatgpt_prompt_guide.md",
+    "published_at": null,
+    "retrieved_at": "2026-11-04T16:59:48.104458+00:00",
+    "analysis_basis": "full_text",
+    "coverage": "selected_short_excerpts_from_full_document_read",
+    "provenance": "github_mcp_fetch_file; blob 7ffc73ee5c64bc53b378d06c6941613ebdc0ca10",
+    "content": "the specific task\naudience, tone, format\nPrompting is iterative"
+  },
+  "claims": [
+    {
+      "id": "C1",
+      "statement": "כדאי לציין למי מיועדת התשובה ומה רוצים לקבל.",
+      "evidence_excerpt": "audience, tone, format",
+      "locator": "2. Mindset: What good looks like",
+      "verification_status": "primary_confirmed",
+      "verified_by": "Codex primary-source reading in this session; publisher OpenAI"
+    },
+    {
+      "id": "C2",
+      "statement": "אפשר לשפר בקשה באמצעות המשך ממוקד.",
+      "evidence_excerpt": "Prompting is iterative",
+      "locator": "1. Introduction: key themes",
+      "verification_status": "primary_confirmed",
+      "verified_by": "Codex primary-source reading in this session; publisher OpenAI"
+    }
+  ]
+}
