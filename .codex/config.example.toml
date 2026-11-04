@@ -1,0 +1,7 @@
+# Example only. Check installed Codex version before copying to config.toml.
+# Do not overwrite existing user configuration.
+[agents]
+max_concurrent_threads_per_session = 2
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
