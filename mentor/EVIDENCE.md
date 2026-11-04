@@ -49,3 +49,12 @@ E11 — [תיק מקור אמיתי](../pilot/01-clear-request/evidence.json), �
 E12 — [40 בדיקות תוכנה ותוצאות אמת](../docs/IMPLEMENTATION_TESTS.md); בדיקות HTTP אינן בדיקות browser.
 
 E13 — [ממשק מקומי והוראות](../docs/WORKBENCH_QUICKSTART.md).
+
+## ראיות מקטע איסוף — 4.11.2026
+
+- קוד בפועל: [daily.py](../src/moh_ai/daily.py), מסלול HTTP וממשק RTL קיימים שהורחבו.
+- שחזור והרצה: [מדריך](../docs/DAILY_COLLECTION.md).
+- 59 בדיקות שעברו, כולל 19 חדשות: [ראיות ומגבלות](../docs/DAILY_COLLECTION_TESTS.md), [בדיקות איסוף](../tests/test_daily.py), [ביקורת עצמאית](../tests/test_daily_review.py).
+- tested: קליטה, dedupe, אחסון, דירוג והצעות ללא מודל, כשלי מקור, נעילה ו־HTTP loopback. תוכן המקורות בבדיקות סינתטי במפורש.
+- blocked: אימות מקורות חיים (DNS), QA בדפדפן (Chromium חסר). configured: שלושה מועמדי RSS כבויים ומשימת ChatGPT קיימת פעילה; אין ראיית ריצה שלה.
+- planned: מתזמן מקומי לאחר אישור מפורש, מודל, MP4 וקבלת תוכן/סגנון אנושית. לא נוצר פוסט חדש או פרסום כחלק ממקטע זה.

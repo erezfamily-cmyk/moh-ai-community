@@ -116,6 +116,12 @@ def main(argv=None) -> int:
     image.add_argument("--draft-id", required=True)
     image.add_argument("--output", required=True, type=Path)
     image.add_argument("--font")
+    daily_parser = sub.add_parser("daily", help="Manually collect configured public sources; never installs a schedule")
+    daily_parser.add_argument("--force", action="store_true", help="Explicitly retry even if already collected today")
+    config = sub.add_parser("daily-sources", help="Read registry or replace it from a JSON list")
+    config.add_argument("--file", type=Path)
+    sub.add_parser("daily-status", help="Read latest run without fetching sources")
+    sub.add_parser("daily-reset", help="Recover interrupted run ONLY after stopping previous collector")
     args = parser.parse_args(argv)
     try:
         if args.command == "doctor":
@@ -130,7 +136,14 @@ def main(argv=None) -> int:
         else:
             from . import editorial
             db = args.data_dir / "moh-ai.sqlite3"
-            if args.command == "serve":
+            if args.command in {"daily", "daily-sources", "daily-status", "daily-reset"}:
+                from . import daily
+                if args.command == "daily": result = daily.collect(db, args.force)
+                elif args.command == "daily-status": result = daily.workspace(db)
+                elif args.command == "daily-reset": result = daily.reset_interrupted(db)
+                elif args.file: result = daily.set_sources(db, json.loads(args.file.read_text(encoding="utf-8")))
+                else: result = {"sources": daily.get_sources(db), "scheduler": "disabled"}
+            elif args.command == "serve":
                 from .web import serve
                 serve(db,args.port)
                 return 0

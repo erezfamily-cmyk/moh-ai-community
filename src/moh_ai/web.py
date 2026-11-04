@@ -5,7 +5,7 @@ from pathlib import Path
 import secrets
 from urllib.parse import parse_qs,urlsplit
 
-from . import editorial
+from . import editorial, daily
 from .sources import parse_source,fetch_source,SourceError
 
 STATIC=Path(__file__).parent/'static'
@@ -39,6 +39,7 @@ def serve(db,port=8765,ready_callback=None):
                 if path.path in {'/app.js','/style.css'}:
                     kind='text/javascript; charset=utf-8' if path.path.endswith('.js') else 'text/css; charset=utf-8'
                     return self.send(200,(STATIC/path.path[1:]).read_bytes(),kind)
+                if path.path=='/api/daily':return self.send(200,daily.workspace(db))
                 if path.path=='/api/workspace':return self.send(200,editorial.list_workspace(db))
                 if path.path=='/api/export':
                     q=parse_qs(path.query);ident=q.get('id',[''])[0]
@@ -62,6 +63,8 @@ def serve(db,port=8765,ready_callback=None):
                     result=parse_source(payload.get('content',''),payload.get('kind','text'),
                         title=payload.get('title',''),url=payload.get('url') or None)
                 elif self.path=='/api/fetch':result=fetch_source(payload.get('url',''))
+                elif self.path=='/api/daily/sources':result=daily.set_sources(db,payload.get('sources'))
+                elif self.path=='/api/daily/run':result=daily.collect(db,force=payload.get('force',False))
                 elif self.path=='/api/packs':result=editorial.save_pack(db,payload)
                 elif self.path=='/api/brief':result=editorial.make_brief(db,payload.get('source_id'))
                 elif self.path=='/api/drafts':result=editorial.save_draft(db,payload.get('source_id'),payload.get('body'),payload.get('claim_map'),origin='user_edit')

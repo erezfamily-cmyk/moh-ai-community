@@ -21,3 +21,31 @@ $('save-review').onclick=()=>action(async()=>{const scores={};for(const key of [
 $('approve').onclick=()=>action(async()=>{await api('/api/approve',{draft_id:$('review-draft').value,actor:$('approval-actor').value});await refresh();message('הגרסה אושרה מקומית. לא פורסם דבר לקהילה.');});
 $('pilot').onclick=()=>action(async()=>{await api('/api/pilot',{});await refresh();tab('library');message('הפיילוט נטען: מקור אמיתי, שתי גרסאות וביקורת מתועדת. הגרסאות עדיין ממתינות לאישור שלך.');});
 refresh().catch(e=>message(e.message,true));
+
+const basisLabels={full_text:'טקסט שנקרא בפועל · חילוץ אוטומטי',transcript:'תמלול בלבד · הסרטון לא נצפה',description_only:'תיאור בלבד · אין הסקת תוכן הסרטון',feed_metadata:'כותרת/מטא־דאטה בלבד'};
+async function refreshDaily(){
+ const data=await api('/api/daily');$('daily-sources').value=JSON.stringify(data.sources,null,2);
+ const run=data.latest,list=$('daily-ideas');list.replaceChildren();
+ if(!run){$('daily-status').textContent='עדיין אין ריצת איסוף. התזמון המקומי כבוי.';return;}
+ const localTime=value=>value?new Date(value).toLocaleString('he-IL',{timeZone:'Asia/Jerusalem'}):'לא ידוע';
+ $('daily-status').textContent=`מצב: ${run.status} · איסוף: ${localTime(run.finished_at||run.started_at)} · ${run.ideas?.length||0} רעיונות · ${run.errors?.length||0} שגיאות · כתיבת פוסט ממתינה למודל או לעריכה ידנית`;
+ for(const idea of run.ideas||[]){
+  const card=document.createElement('article');card.className='draft-card';
+  const h=document.createElement('h3');h.textContent=(idea.recommended?'מומלץ לבדיקה · ':'')+idea.title;
+  const note=document.createElement('p');note.textContent=`${idea.angle} · ציון התאמה ${idea.score} · ${basisLabels[idea.analysis_basis]||idea.analysis_basis}`;
+  const why=document.createElement('p');why.textContent=idea.reasons.join(' · ');
+  const brief=document.createElement('p');brief.textContent=[idea.brief,idea.community_value,idea.suggested_action,idea.visual_brief].join(' ');
+  const excerpt=document.createElement('blockquote');excerpt.textContent='קטע ראיה: '+idea.evidence_excerpt;
+  const dates=document.createElement('p');dates.className='small';dates.textContent='פרסום לפי המקור: '+(idea.published_at||'לא ידוע')+' · נקרא: '+localTime(idea.retrieved_at);
+  const link=document.createElement('a');link.href=idea.source_url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='פתיחת המקור';
+  const limits=document.createElement('p');limits.className='small';limits.textContent=idea.limitations.join(' · ');
+  const edit=document.createElement('button');edit.className='secondary';edit.textContent='בדיקת הראיות והכנה לכתיבה';
+  edit.onclick=()=>{parsed=run.items.find(item=>item.id===idea.item_id).source;$('source-title').value=parsed.title;$('source-url').value=parsed.canonical_url;$('source-content').value=parsed.content;$('source-kind').value=parsed.kind;$('claim-statement').value='';$('claim-excerpt').value=idea.evidence_excerpt;$('claim-locator').value=parsed.segments?.[0]?.timestamp||'תחילת הטקסט המחולץ';$('claim-verified').checked=false;$('claim-checker').value='';$('parsed-status').textContent=basisLabels[parsed.analysis_basis]||parsed.analysis_basis;tab('sources');message('נסחו טענה ובדקו את הראיות לפני שמירת תיק תוכן לכתיבה.');};
+  card.append(h,note,why,brief,excerpt,dates,link,limits,edit);list.append(card);
+ }
+ if(!(run.ideas||[]).length){const p=document.createElement('p');p.textContent='אין מספיק תוכן נגיש ורלוונטי להצעה. ראו את הראיות והשגיאות; אפשר להוסיף כתבה או תמלול ידנית.';list.append(p);}
+ $('daily-evidence').textContent=JSON.stringify({errors:run.errors,duplicates:run.duplicates,deferred:run.deferred,items:run.items,runs:data.runs},null,2);
+}
+$('daily-run').onclick=()=>action(async()=>{const b=$('daily-run');b.disabled=true;$('daily-status').textContent='אוסף מקורות… אפשר להמתין; אין צורך להתחיל ריצה נוספת.';try{const run=await api('/api/daily/run',{force:$('daily-force').checked});await refreshDaily();await refresh();message(run.reused?'תוצאת היום כבר קיימת והוצגה ללא בקשות רשת חדשות.':'האיסוף הסתיים. כל הרעיונות דורשים בדיקת ראיות וכתיבה.');}finally{b.disabled=false;}});
+$('daily-save').onclick=()=>action(async()=>{await api('/api/daily/sources',{sources:JSON.parse($('daily-sources').value)});message('המקורות נשמרו. לא הופעל תזמון.');});
+refreshDaily().catch(e=>message(e.message,true));

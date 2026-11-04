@@ -6,6 +6,7 @@ import re
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 
 from moh_ai.web import serve
 
@@ -55,5 +56,23 @@ class WebTests(unittest.TestCase):
         self.assertEqual(self.post({'content':'text','title':{}})[0],400)
         self.assertEqual(self.request('GET','/../../etc/passwd')[0],404)
         self.assertEqual(self.request('GET','/api/export?id=not-found&final=true')[0],400)
+
+    def test_daily_registry_run_and_evidence_http(self):
+        from moh_ai.sources import parse_source
+        config={'name':'Synthetic HTTP integration','url':'https://example.org/article','kind':'link','enabled':True,'authority':'primary'}
+        self.assertEqual(self.post({'sources':[config]}, {'Origin':'https://evil.example'},path='/api/daily/sources')[0],403)
+        self.assertEqual(self.post({'sources':[config]},path='/api/daily/sources')[0],200)
+        record=parse_source('AI prompt tutorial for a useful tool. '*6,'article',title='AI tutorial',url=config['url'])
+        with patch('moh_ai.daily.fetch_source',return_value=record):
+            status,body=self.post({},path='/api/daily/run')
+        self.assertEqual(status,200)
+        report=json.loads(body);self.assertEqual(len(report['ideas']),1)
+        status,body=self.request('GET','/api/daily')
+        self.assertEqual(status,200);ws=json.loads(body)
+        self.assertEqual(ws['latest']['id'],report['id']);self.assertEqual(ws['scheduler'],'disabled')
+        self.assertEqual(self.post({'force':'yes'},path='/api/daily/run')[0],400)
+        status,html=self.request('GET','/')
+        self.assertIn('id="daily-run"',html.decode())
+        self.assertEqual(self.post({'sources':[]},path='/api/daily/sources')[0],200)
 
 if __name__=='__main__':unittest.main()

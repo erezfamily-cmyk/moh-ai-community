@@ -100,6 +100,20 @@ class SourcesTests(unittest.TestCase):
             with self.assertRaisesRegex(SourceError, 'size limit'):
                 fetch_source('https://example.org',max_bytes=5)
 
+    def test_feed_transport_uses_same_pinned_fetch_limits(self):
+        from moh_ai.sources import fetch_document
+        conn = self.connection(headers={'Content-Type':'application/rss+xml'}, body=b'<rss/>')
+        with patch('moh_ai.sources.socket.getaddrinfo', return_value=PUBLIC), patch('moh_ai.sources._PinnedHTTPSConnection', return_value=conn):
+            result = fetch_document('https://example.org/feed')
+        self.assertEqual(result['text'], '<rss/>')
+        self.assertEqual(result['mime'], 'application/rss+xml')
+        self.assertEqual(result['canonical_url'], 'https://example.org/feed')
+        conn.close.assert_called_once()
+        conn = self.connection(headers={'Content-Type':'application/atom+xml'}, body=b'<feed/>')
+        with patch('moh_ai.sources.socket.getaddrinfo', return_value=PUBLIC), patch('moh_ai.sources._PinnedHTTPSConnection', return_value=conn):
+            with self.assertRaisesRegex(SourceError, 'not article evidence'):
+                fetch_source('https://example.org/feed')
+
     def test_unsupported_content_and_http_failures_explicit(self):
         for status,headers in [(403,{}),(200,{'Content-Type':'video/mp4'}),(200,{'Content-Type':'text/plain','Content-Encoding':'gzip'})]:
             with self.subTest(status=status,headers=headers), patch('moh_ai.sources.socket.getaddrinfo', return_value=PUBLIC), patch('moh_ai.sources._PinnedHTTPSConnection',return_value=self.connection(status,headers)):
