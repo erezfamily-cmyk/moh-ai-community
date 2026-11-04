@@ -55,3 +55,12 @@ E14 — [ממשק חי פרטי ותיעוד בדיקות](../docs/LIVE_INTERFAC
 E15 — [דוח איסוף RSS אמיתי](../research/discovery/latest-report.json) ו־[ראיות רשת](../research/discovery/network-evidence.json): שלושה פידים, 1,020 metadata וארבעה מועמדים. אין ניתוח גוף כתבה/וידאו.
 
 E16 — [סקירת Apple Design](../research/design/APPLE_DESIGN_REVIEW.md) ו־[הסבר תיקונים ובדיקות](../docs/APPLE_DESIGN_AND_DISCOVERY.md): סקיל מקורי מורשה, ביקורת מקור ותיקונים בממשק; לא אישור נגישות מלא או מוצר רשמי של Apple.
+
+
+## E17 — דוגמה מודרכת מקצה לקצה
+
+- תיק תהליך: [pilot/02-statebench/README.md](../pilot/02-statebench/README.md).
+- ראיות וחיבורים: evidence.json, integrations.json; הנחיה: brief.md.
+- התפתחות: post-v1.md → review-v1.md → post-v2.md → review-v2.md.
+- תוצר: image.png וסקריפט שחזור; demo.json כולל מיפוי טענות.
+- יישום: live-web/dist/demo.js ו־demo.css; דוגמה זמינה ב־#demo. בדיקות ותיחום הוכחות ב־HANDOFF.

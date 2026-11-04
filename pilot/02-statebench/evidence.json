@@ -1,0 +1,31 @@
+{
+  "source": {
+    "title": "StateBench: Testing how language models track state changes over long documents",
+    "url": "https://huggingface.co/blog/allenai/statebench",
+    "published_at": "2026-11-03",
+    "analysis_basis": "full_text",
+    "coverage": "Article body read in this assistant session; only short evidence excerpts retained",
+    "discovery_id": "8d86676710497099b1091deb",
+    "verification_status": "publisher_report_not_independently_reproduced",
+    "retrieved_at": "2026-11-04T19:34:34.850643+00:00"
+  },
+  "claims": [
+    {
+      "id": "C1",
+      "statement": "StateBench בוחן מעקב אחר מידע משתנה במסמכים.",
+      "locator": "Introduction, paragraph 1",
+      "evidence_excerpt": "a benchmark for long-context state tracking"
+    },
+    {
+      "id": "C2",
+      "statement": "החוקרים מדווחים על ירידה בדיוק במשימות המעקב הקשות ככל שהקלט התארך.",
+      "locator": "Frontier models",
+      "evidence_excerpt": "accuracy fell sharply as inputs grew longer"
+    }
+  ],
+  "editorial_inference": "בקשת טבלת מצב והפניה לשינוי האחרון היא הצעת עבודה של העורך, לא שיטה שהוכחה במחקר.",
+  "original_example": "פגישה ששעתה והיום שלה משתנים; לא שאלה מתוך StateBench ולא תוצאת בדיקה של כלי.",
+  "voice_status": "provisional",
+  "origin": "assistant_session",
+  "approval_status": "awaiting_amit"
+}

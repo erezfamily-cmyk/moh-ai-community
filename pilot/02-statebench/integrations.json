@@ -1,0 +1,40 @@
+{
+  "executed_at": "2026-11-04T19:36:59.453Z",
+  "skill": {
+    "name": "moh-ai-editor",
+    "mode": "read_and_applied_in_assistant_session_and_critic",
+    "effect": [
+      "source_basis_disclosed",
+      "claims_mapped",
+      "original_example_labeled",
+      "voice_provisional",
+      "v1_review_v2_preserved"
+    ]
+  },
+  "external_mcp": {
+    "name": "GitHub",
+    "operation": "fetch",
+    "url": "https://api.github.com/repos/allenai/state-bench/contents/README.md",
+    "status": "success",
+    "role": "corroborate_project_provenance_and_scope; not independent confirmation of performance"
+  },
+  "article_read": {
+    "url": "https://huggingface.co/blog/allenai/statebench",
+    "tool": "web_open",
+    "status": "body_read",
+    "retained": "short_excerpts_only"
+  },
+  "generation": {
+    "origin": "assistant_session",
+    "autonomous_local_model": false,
+    "paid_service_dependency_added": false
+  },
+  "media": {
+    "method": "local_Pillow_RAQM",
+    "format": "PNG",
+    "width": 1080,
+    "height": 1350,
+    "content": "exact_original_educational_diagram"
+  },
+  "approval": "awaiting_amit"
+}
