@@ -51,3 +51,7 @@ E12 — [40 בדיקות תוכנה ותוצאות אמת](../docs/IMPLEMENTATIO
 E13 — [ממשק מקומי והוראות](../docs/WORKBENCH_QUICKSTART.md).
 
 E14 — [ממשק חי פרטי ותיעוד בדיקות](../docs/LIVE_INTERFACE.md): תשע בדיקות Node, בדיקות browser לעריכה, גרסאות והורדת PNG, התאמת רוחבים ופרסוםSucceeded. הנתונים נשמרים בדפדפן; יצירת תוכן אוטונומית וסריקה יומית עדיין אינן חלק ממנו.
+
+E15 — [דוח איסוף RSS אמיתי](../research/discovery/latest-report.json) ו־[ראיות רשת](../research/discovery/network-evidence.json): שלושה פידים, 1,020 metadata וארבעה מועמדים. אין ניתוח גוף כתבה/וידאו.
+
+E16 — [סקירת Apple Design](../research/design/APPLE_DESIGN_REVIEW.md) ו־[הסבר תיקונים ובדיקות](../docs/APPLE_DESIGN_AND_DISCOVERY.md): סקיל מקורי מורשה, ביקורת מקור ותיקונים בממשק; לא אישור נגישות מלא או מוצר רשמי של Apple.

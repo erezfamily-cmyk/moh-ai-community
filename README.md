@@ -1,5 +1,7 @@
 # מוח AI — שולחן התוכן של הקהילה
 
+**עדכון:** [Apple Design ואיסוף מקורות אמיתי](docs/APPLE_DESIGN_AND_DISCOVERY.md) — דוח RSS, כיווני תוכן ושיפור הממשק.
+
 **[פתיחת הממשק החי והפרטי](https://moh-ai-editorial-lab.mentorysai-c-6274.chatgpt.site)** · [מה עובד ואיך נשמרת העבודה](docs/LIVE_INTERFACE.md)
 
 הממשק בקישור עובד בדפדפן ושומר נתונים במכשיר הנוכחי. אין צורך להתקין Python כדי לנסות אותו.

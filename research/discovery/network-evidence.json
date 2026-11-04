@@ -1,0 +1,17 @@
+{
+  "checked_date": "2026-11-04",
+  "method": "Python urllib with inherited HTTPS proxy; no new credentials or paid API",
+  "initial_access_checks": [
+    {"url":"https://openai.com/news/rss.xml","http_status":200,"content_type":"text/xml; charset=utf-8","bytes":825679},
+    {"url":"https://blog.google/innovation-and-ai/technology/ai/rss/","http_status":200,"content_type":"application/xml; charset=utf-8","bytes":30644},
+    {"url":"https://huggingface.co/blog/feed.xml","http_status":200,"content_type":"application/rss+xml; charset=utf-8","bytes":264968}
+  ],
+  "primary_link_observations": [
+    {"page":"https://openai.com/news/","observation":"RSS link points to https://openai.com/news/rss.xml"},
+    {"page":"https://blog.google/innovation-and-ai/technology/ai/","observation":"RSS link points to https://blog.google/rss/; category RSS endpoint was separately requested successfully and parsed"},
+    {"page":"https://huggingface.co/blog/feed.xml","observation":"Endpoint returned 200 with RSS XML through the normal runtime proxy"}
+  ],
+  "local_dns_observation": "Direct hostname resolution is unavailable in this runtime. The collector uses the existing trusted proxy for the three allowlisted publishers rather than bypassing the proxy.",
+  "final_report":"latest-report.json",
+  "not_performed":["full article reading","video watching","transcript retrieval","AI draft generation","new scheduled task"]
+}

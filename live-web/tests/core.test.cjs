@@ -11,3 +11,10 @@ test('oversized content cannot be restored',()=>{const s=fixture();s.sources[0].
 test('approval needs current review and saved edits',()=>{const s=fixture(),d=s.drafts[0];assert.match(canApprove(d,s.sources[0],true),/שמרו/);d.review.version=1;assert.match(canApprove(d,s.sources[0]),/ביקורת/);});
 test('approval cannot bypass blocking review or unverified source',()=>{const s=fixture(),d=s.drafts[0];d.review.blocking=true;assert.notEqual(canApprove(d,s.sources[0]),'');d.review.blocking=false;s.sources[0].verified=false;assert.notEqual(canApprove(d,s.sources[0]),'');});
 test('saved verified reviewed draft may request human approval',()=>{const s=validateBackup(fixture());assert.equal(canApprove(s.drafts[0],s.sources[0]),'');assert.equal(s.drafts[0].approvedVersion,null);});
+const {validateDiscoveryReport}=require('../dist/core.js');
+const report=JSON.parse(fs.readFileSync(__dirname+'/../dist/assets/discovery.json','utf8'));
+test('real RSS report retains four metadata-only unverified candidates',()=>{const r=validateDiscoveryReport(report);assert.equal(r.sources.length,3);assert.equal(r.items.length,4);assert.ok(r.items.every(x=>x.analysis_basis==='metadata_only'&&x.verification_status==='not_verified'));});
+test('discovery cannot label unread metadata as verified full text',()=>{const r=structuredClone(report);r.items[0].analysis_basis='full_text';assert.throws(()=>validateDiscoveryReport(r));});
+test('discovery rejects unsafe article URL',()=>{const r=structuredClone(report);r.items[0].url='javascript:alert(1)';assert.throws(()=>validateDiscoveryReport(r));});
+test('discovery rejects invalid publication dates',()=>{const r=structuredClone(report);r.items[0].published_at='yesterday';assert.throws(()=>validateDiscoveryReport(r));});
+test('discovery rejects a candidate without its source',()=>{const r=structuredClone(report);r.items[0].source_id='missing';assert.throws(()=>validateDiscoveryReport(r));});

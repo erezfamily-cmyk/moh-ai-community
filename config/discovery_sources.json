@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {"id":"openai-news","title":"OpenAI News","url":"https://openai.com/news/rss.xml","enabled":true},
+    {"id":"google-ai","title":"Google AI Blog","url":"https://blog.google/innovation-and-ai/technology/ai/rss/","enabled":true},
+    {"id":"huggingface-blog","title":"Hugging Face Blog","url":"https://huggingface.co/blog/feed.xml","enabled":true}
+  ]
+}

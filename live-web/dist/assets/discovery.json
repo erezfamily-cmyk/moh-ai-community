@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-04T19:06:47.758956+00:00",
+  "collection_method": "rss",
+  "status": "collected",
+  "sources": [
+    {
+      "id": "openai-news",
+      "title": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "status": "collected",
+      "parsed_items": 500,
+      "content_sha256": "2705740a12f97e0a54d3f432377e0a26526e08be141289d594d9cd2b30b643ec"
+    },
+    {
+      "id": "google-ai",
+      "title": "Google AI Blog",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/rss/",
+      "status": "collected",
+      "parsed_items": 20,
+      "content_sha256": "59f04a0b42ee4100eac013426361e6a95c5d42ba5834a3d9ff11c325fa935b0c"
+    },
+    {
+      "id": "huggingface-blog",
+      "title": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "status": "collected",
+      "parsed_items": 500,
+      "content_sha256": "b0edfee797366727222ebc4d80195a29fa9d6282bea5aba98ecb91e42983e472"
+    }
+  ],
+  "items": [
+    {
+      "id": "8d86676710497099b1091deb",
+      "title": "StateBench: Testing how language models track state changes over long documents",
+      "url": "https://huggingface.co/blog/allenai/statebench",
+      "published_at": "2026-11-03T17:15:21+00:00",
+      "publication_raw": "Tue, 03 Nov 2026 17:15:21 GMT",
+      "retrieved_at": "2026-11-04T19:06:47.758956+00:00",
+      "source_id": "huggingface-blog",
+      "source_name": "Hugging Face Blog",
+      "source_type": "article",
+      "analysis_basis": "metadata_only",
+      "content_status": "needs_full_text",
+      "summary": "",
+      "verification_status": "not_verified",
+      "score": 56,
+      "score_reason": [
+        "מטא־דאטה ממקור שנבחר מראש",
+        "הרחבת חלון עד 72 שעות",
+        "התאמה למילות מפתח של AI ושימוש מעשי — דירוג כללים, לא ניתוח הכתבה"
+      ],
+      "suggested_angle": "מה אפשר ללמוד על חילוץ מידע ממסמכים, ומה חייבים לבדוק בעצמנו?",
+      "suggested_format": "post_image",
+      "age_hours": 25.86
+    },
+    {
+      "id": "fc87a45dcfbf03d417250555",
+      "title": "Heimstaden is changing residential real estate management with AI",
+      "url": "https://openai.com/index/heimstaden",
+      "published_at": "2026-11-03T08:00:00+00:00",
+      "publication_raw": "Tue, 03 Nov 2026 08:00:00 GMT",
+      "retrieved_at": "2026-11-04T19:06:47.758956+00:00",
+      "source_id": "openai-news",
+      "source_name": "OpenAI News",
+      "source_type": "article",
+      "analysis_basis": "metadata_only",
+      "content_status": "needs_full_text",
+      "summary": "Discover how Heimstaden uses OpenAI’s ChatGPT Enterprise and Codex to transform property",
+      "verification_status": "not_verified",
+      "score": 56,
+      "score_reason": [
+        "מטא־דאטה ממקור שנבחר מראש",
+        "הרחבת חלון עד 72 שעות",
+        "התאמה למילות מפתח של AI ושימוש מעשי — דירוג כללים, לא ניתוח הכתבה"
+      ],
+      "suggested_angle": "מה הוכרז, למי זה עשוי לעזור ומה צריך לבדוק לפני שמנסים?",
+      "suggested_format": "post_image",
+      "age_hours": 35.11
+    },
+    {
+      "id": "4d3938441f216409a8f1b94c",
+      "title": "Palette: teaching a small model to build decks in your design language",
+      "url": "https://huggingface.co/blog/ibm-research/palette-deck-building",
+      "published_at": "2026-11-03T16:35:36+00:00",
+      "publication_raw": "Tue, 03 Nov 2026 16:35:36 GMT",
+      "retrieved_at": "2026-11-04T19:06:47.758956+00:00",
+      "source_id": "huggingface-blog",
+      "source_name": "Hugging Face Blog",
+      "source_type": "article",
+      "analysis_basis": "metadata_only",
+      "content_status": "needs_full_text",
+      "summary": "",
+      "verification_status": "not_verified",
+      "score": 44,
+      "score_reason": [
+        "מטא־דאטה ממקור שנבחר מראש",
+        "הרחבת חלון עד 72 שעות",
+        "התאמה למילות מפתח של AI ושימוש מעשי — דירוג כללים, לא ניתוח הכתבה"
+      ],
+      "suggested_angle": "איך AI יכול לעזור בהכנת מצגת, ומה עדיין צריך לערוך ידנית?",
+      "suggested_format": "post_image",
+      "age_hours": 26.52
+    },
+    {
+      "id": "25493a43cba550c7fe81484a",
+      "title": "Accelerating engineering for the physical world",
+      "url": "https://openai.com/index/accelerating-engineering-for-the-physical-world",
+      "published_at": "2026-11-03T12:00:00+00:00",
+      "publication_raw": "Tue, 03 Nov 2026 12:00:00 GMT",
+      "retrieved_at": "2026-11-04T19:06:47.758956+00:00",
+      "source_id": "openai-news",
+      "source_name": "OpenAI News",
+      "source_type": "article",
+      "analysis_basis": "metadata_only",
+      "content_status": "needs_full_text",
+      "summary": "Discover how ChatGPT and Codex are helping engineers accelerate CAD, PCB design,",
+      "verification_status": "not_verified",
+      "score": 44,
+      "score_reason": [
+        "מטא־דאטה ממקור שנבחר מראש",
+        "הרחבת חלון עד 72 שעות",
+        "התאמה למילות מפתח של AI ושימוש מעשי — דירוג כללים, לא ניתוח הכתבה"
+      ],
+      "suggested_angle": "מה הוכרז, למי זה עשוי לעזור ומה צריך לבדוק לפני שמנסים?",
+      "suggested_format": "post_image",
+      "age_hours": 31.11
+    }
+  ],
+  "counts": {
+    "input_items": 1020,
+    "duplicate_items": 1,
+    "unknown_dates": 0,
+    "future_dates": 0,
+    "older_than_72h": 1000,
+    "low_relevance": 14,
+    "selected_items": 4
+  },
+  "generation_status": "awaiting_full_source_and_model",
+  "limitations": [
+    "כותרות ותקצירי RSS בלבד; לא נקרא גוף הכתבות ולא נצפה וידאו.",
+    "הזוויות הן הצעות כללים לעריכה, לא טיוטות שנוצרו ב־AI ולא אימות טענות.",
+    "תאריכים חסרים אינם מוחלפים בתאריך האיסוף.",
+    "מקורות ללא פריטים מתאימים עשויים להחזיר אפס הצעות."
+  ]
+}

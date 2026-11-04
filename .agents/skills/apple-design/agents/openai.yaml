@@ -1,0 +1,14 @@
+interface:
+  display_name: Apple Design
+  short_description: Apple-inspired fluid web interfaces and accessible motion
+  default_prompt: Use $apple-design to improve the clarity, responsiveness, and accessibility
+    of this interface.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
