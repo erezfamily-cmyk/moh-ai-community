@@ -1,0 +1,13 @@
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
+const {validateBackup,canApprove}=require('../dist/core.js');
+const pilot=JSON.parse(fs.readFileSync(__dirname+'/../dist/assets/pilot.json','utf8'));
+function fixture(){return {schemaVersion:1,sources:[{id:'s',title:'מקור',url:pilot.evidence.source.url,content:'ראיה מדויקת',claim:'טענה',excerpt:'ראיה',verified:true,basis:'full_text',createdAt:'2026-11-04',publishedAt:null}],drafts:[{id:'d',sourceId:'s',title:'פוסט',text:'פוסט בעברית',version:2,origin:'manual',visual:{title:'תמונה',points:['א','ב','ג']},history:[{version:1,text:'גרסה ראשונה',title:'פוסט',at:'2026-11-04'}],review:{reviewer:'עמית',type:'human',version:2,blocking:false,findings:[],scores:{accuracy:4,clarity:4,usefulness:4,voice:4}},approvedVersion:null,createdAt:'2026-11-04',updatedAt:'2026-11-04'}],voiceExamples:'',updatedAt:'2026-11-04'};}
+test('backup preserves Hebrew, exact source evidence and history',()=>{const s=validateBackup(fixture());assert.equal(s.drafts[0].text,'פוסט בעברית');assert.equal(s.drafts[0].history[0].text,'גרסה ראשונה');assert.equal(s.sources[0].publishedAt,null);});
+test('unsupported backup schema is rejected',()=>assert.throws(()=>validateBackup({...fixture(),schemaVersion:2})));
+test('external unsafe link is rejected',()=>{const s=fixture();s.sources[0].url='javascript:alert(1)';assert.throws(()=>validateBackup(s));});
+test('quote outside source is rejected',()=>{const s=fixture();s.sources[0].excerpt='המצאה';assert.throws(()=>validateBackup(s));});
+test('orphan draft is rejected',()=>{const s=fixture();s.drafts[0].sourceId='missing';assert.throws(()=>validateBackup(s));});
+test('oversized content cannot be restored',()=>{const s=fixture();s.sources[0].content='א'.repeat(150001);assert.throws(()=>validateBackup(s));});
+test('approval needs current review and saved edits',()=>{const s=fixture(),d=s.drafts[0];assert.match(canApprove(d,s.sources[0],true),/שמרו/);d.review.version=1;assert.match(canApprove(d,s.sources[0]),/ביקורת/);});
+test('approval cannot bypass blocking review or unverified source',()=>{const s=fixture(),d=s.drafts[0];d.review.blocking=true;assert.notEqual(canApprove(d,s.sources[0]),'');d.review.blocking=false;s.sources[0].verified=false;assert.notEqual(canApprove(d,s.sources[0]),'');});
+test('saved verified reviewed draft may request human approval',()=>{const s=validateBackup(fixture());assert.equal(canApprove(s.drafts[0],s.sources[0]),'');assert.equal(s.drafts[0].approvedVersion,null);});

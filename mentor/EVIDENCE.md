@@ -49,3 +49,5 @@ E11 — [תיק מקור אמיתי](../pilot/01-clear-request/evidence.json), �
 E12 — [40 בדיקות תוכנה ותוצאות אמת](../docs/IMPLEMENTATION_TESTS.md); בדיקות HTTP אינן בדיקות browser.
 
 E13 — [ממשק מקומי והוראות](../docs/WORKBENCH_QUICKSTART.md).
+
+E14 — [ממשק חי פרטי ותיעוד בדיקות](../docs/LIVE_INTERFACE.md): תשע בדיקות Node, בדיקות browser לעריכה, גרסאות והורדת PNG, התאמת רוחבים ופרסוםSucceeded. הנתונים נשמרים בדפדפן; יצירת תוכן אוטונומית וסריקה יומית עדיין אינן חלק ממנו.
