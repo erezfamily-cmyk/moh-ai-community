@@ -89,6 +89,7 @@ def main(argv=None) -> int:
     ingest.add_argument("--kind", choices=["text", "transcript"], default="text")
     web = sub.add_parser("serve", help="Open loopback-only Hebrew editorial workbench")
     web.add_argument("--port", type=int, default=8765)
+    web.add_argument("--local-model", default=None, help="Installed Ollama model name, e.g. qwen3:8b")
     source = sub.add_parser("source", help="Parse local text, HTML, VTT or SRT into source record")
     source.add_argument("--file", type=Path, required=True)
     source.add_argument("--kind", choices=["text","article","html","transcript","vtt","srt","description"], default="text")
@@ -132,7 +133,7 @@ def main(argv=None) -> int:
             db = args.data_dir / "moh-ai.sqlite3"
             if args.command == "serve":
                 from .web import serve
-                serve(db,args.port)
+                serve(db,args.port,local_model=args.local_model)
                 return 0
             elif args.command == "source":
                 from .sources import parse_source
