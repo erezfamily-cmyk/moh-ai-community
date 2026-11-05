@@ -108,6 +108,35 @@ def _now(value=None):
     return value.astimezone(timezone.utc)
 
 
+def read_report(path: str | Path) -> dict:
+    """Read the local discovery snapshot without upgrading metadata to evidence."""
+    data=json.loads(Path(path).read_text(encoding='utf-8'))
+    if not isinstance(data,dict) or data.get('schema_version')!=1 or not isinstance(data.get('items'),list):
+        raise DiscoveryError('invalid discovery report')
+    return data
+
+
+def propose_angles(record: dict) -> list[dict]:
+    """Offer transparent editorial directions from extracted text, without an AI model."""
+    if not isinstance(record,dict) or record.get('analysis_basis')!='full_text' or len(record.get('content',''))<500:
+        raise DiscoveryError('full article text is required before proposing angles')
+    text=plain_text(record['content'])
+    sentences=[re.sub(r'\s+',' ',s).strip() for s in re.split(r'(?<=[.!?])\s+',text) if len(s.split())>=8]
+    evidence=[]
+    for sentence in sentences:
+        if len(sentence)>500:continue
+        if any(sentence==x['excerpt'] for x in evidence):continue
+        evidence.append({'excerpt':sentence,'locator':'קטע מהכתבה המלאה'})
+        if len(evidence)==3:break
+    if not evidence:raise DiscoveryError('could not identify short evidence excerpts; review the text manually')
+    title=record.get('title') or 'הנושא שבכתבה'
+    return [
+        {'id':'explain','title':'להסביר רעיון אחד','angle':f'מה כדאי למתחילים להבין על {title}?','basis':'editorial_template','evidence':evidence[:2]},
+        {'id':'try','title':'להציע התנסות קטנה','angle':'איזו פעולה פשוטה אפשר לנסות בעקבות הכתבה, ומה צריך לבדוק בתוצאה?','basis':'editorial_template','evidence':evidence[:2]},
+        {'id':'question','title':'להעלות שאלה לקהילה','angle':'איזו שאלה פתוחה או מגבלה בכתבה כדאי לברר יחד?','basis':'editorial_template','evidence':evidence[-2:]},
+    ]
+
+
 def load_sources(path: str | Path) -> list[dict]:
     data = json.loads(Path(path).read_text(encoding='utf-8'))
     if not isinstance(data, dict) or type(data.get('schema_version')) is not int or data.get('schema_version') != 1:
