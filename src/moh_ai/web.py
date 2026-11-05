@@ -7,6 +7,7 @@ from urllib.parse import parse_qs,urlsplit
 
 from . import editorial
 from .sources import parse_source,fetch_source,SourceError
+from . import discovery
 
 STATIC=Path(__file__).parent/'static'
 
@@ -40,6 +41,9 @@ def serve(db,port=8765,ready_callback=None):
                     kind='text/javascript; charset=utf-8' if path.path.endswith('.js') else 'text/css; charset=utf-8'
                     return self.send(200,(STATIC/path.path[1:]).read_bytes(),kind)
                 if path.path=='/api/workspace':return self.send(200,editorial.list_workspace(db))
+                if path.path=='/api/discovery':
+                    report_path=Path(__file__).resolve().parents[2]/'research'/'discovery'/'latest-report.json'
+                    return self.send(200,discovery.read_report(report_path))
                 if path.path=='/api/export':
                     q=parse_qs(path.query);ident=q.get('id',[''])[0]
                     data=editorial.export_bundle(db,ident,final=q.get('final',['false'])[0]=='true')
@@ -62,6 +66,18 @@ def serve(db,port=8765,ready_callback=None):
                     result=parse_source(payload.get('content',''),payload.get('kind','text'),
                         title=payload.get('title',''),url=payload.get('url') or None)
                 elif self.path=='/api/fetch':result=fetch_source(payload.get('url',''))
+                elif self.path=='/api/discovery/read':
+                    report_path=Path(__file__).resolve().parents[2]/'research'/'discovery'/'latest-report.json'
+                    report=discovery.read_report(report_path)
+                    item=next((x for x in report['items'] if x.get('id')==payload.get('id')),None)
+                    if item is None:raise ValueError('candidate is not in the current discovery report')
+                    result=fetch_source(item['url'])
+                    if result.get('analysis_basis')!='full_text' or len(result.get('content',''))<500:
+                        raise ValueError('full article text was not available; use the source link or paste accessible text')
+                    result['title']=result.get('title') or item['title']
+                    result['published_at']=item.get('published_at')
+                    result['discovery_id']=item['id']
+                    result['angles']=discovery.propose_angles(result)
                 elif self.path=='/api/packs':result=editorial.save_pack(db,payload)
                 elif self.path=='/api/brief':result=editorial.make_brief(db,payload.get('source_id'))
                 elif self.path=='/api/drafts':result=editorial.save_draft(db,payload.get('source_id'),payload.get('body'),payload.get('claim_map'),origin='user_edit')
