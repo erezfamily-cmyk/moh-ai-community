@@ -12,7 +12,9 @@ from . import discovery
 STATIC=Path(__file__).parent/'static'
 
 
-def serve(db,port=8765,ready_callback=None):
+def serve(db,port=8765,ready_callback=None,local_model=None):
+    from . import production
+    production.configure_model(local_model)
     token=secrets.token_urlsafe(32)
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args):pass
@@ -41,6 +43,20 @@ def serve(db,port=8765,ready_callback=None):
                     kind='text/javascript; charset=utf-8' if path.path.endswith('.js') else 'text/css; charset=utf-8'
                     return self.send(200,(STATIC/path.path[1:]).read_bytes(),kind)
                 if path.path=='/api/workspace':return self.send(200,editorial.list_workspace(db))
+                if path.path=='/api/local-model':return self.send(200,production.local_model_status())
+                if path.path.startswith('/api/production-runs/'):
+                    tail=path.path.removeprefix('/api/production-runs/')
+                    if tail.endswith('/visual.svg'):
+                        ident=tail[:-len('/visual.svg')]
+                        if len(ident)!=24 or any(ch not in '0123456789abcdef' for ch in ident):return self.send(404,{'error':'not found'})
+                        return self.send(200,production.visual_asset(db,ident),'image/svg+xml; charset=utf-8')
+                    ident=tail
+                    if len(ident)!=24 or any(ch not in '0123456789abcdef' for ch in ident):return self.send(404,{'error':'not found'})
+                    return self.send(200,production.get_run(db,ident))
+                if path.path=='/api/production-export':
+                    q=parse_qs(path.query);ident=q.get('id',[''])[0]
+                    data=production.export_run(db,ident,final=q.get('final',['false'])[0]=='true')
+                    return self.send(200,data,'application/zip',{'Content-Disposition':'attachment; filename="moh-ai-production.zip"'})
                 if path.path=='/api/discovery':
                     report_path=Path(__file__).resolve().parents[2]/'research'/'discovery'/'latest-report.json'
                     return self.send(200,discovery.read_report(report_path))
@@ -83,6 +99,12 @@ def serve(db,port=8765,ready_callback=None):
                 elif self.path=='/api/drafts':result=editorial.save_draft(db,payload.get('source_id'),payload.get('body'),payload.get('claim_map'),origin='user_edit')
                 elif self.path=='/api/reviews':result=editorial.record_review(db,payload.get('draft_id'),payload.get('report'))
                 elif self.path=='/api/approve':result=editorial.approve(db,payload.get('draft_id'),payload.get('actor'))
+                elif self.path=='/api/production-runs':result=production.start_run(db,payload.get('source_id'))
+                elif self.path.startswith('/api/production-runs/') and self.path.endswith('/approve'):
+                    ident=self.path.removeprefix('/api/production-runs/')[:-len('/approve')].strip('/')
+                    if len(ident)!=24 or any(ch not in '0123456789abcdef' for ch in ident):return self.send(404,{'error':'not found'})
+                    if payload.get('checked') is not True:raise ValueError('סמנו שקראתם את הפוסט ובדקתם את תמונת הטיוטה.')
+                    result=production.approve_run(db,ident,payload.get('actor'))
                 elif self.path=='/api/pilot':
                     from .pilot import load_pilot
                     result=load_pilot(db)
