@@ -33,6 +33,14 @@ APPROVED_FEEDS = {
                   'hosts': {'blog.google'}, 'article_hosts': {'blog.google'}},
     'huggingface-blog': {'url': 'https://huggingface.co/blog/feed.xml',
                         'hosts': {'huggingface.co'}, 'article_hosts': {'huggingface.co'}},
+    'deepmind-blog': {'url': 'https://deepmind.google/blog/rss.xml',
+                      'hosts': {'deepmind.google'}, 'article_hosts': {'deepmind.google'}},
+    'microsoft-research': {'url': 'https://www.microsoft.com/en-us/research/feed/',
+                           'hosts': {'www.microsoft.com', 'microsoft.com'},
+                           'article_hosts': {'www.microsoft.com', 'microsoft.com'}},
+    'geektime-israel': {'url': 'https://www.geektime.co.il/feed/',
+                        'hosts': {'www.geektime.co.il', 'geektime.co.il'},
+                        'article_hosts': {'www.geektime.co.il', 'geektime.co.il'}},
 }
 TRACKING = {'fbclid', 'gclid', 'dclid', 'trk', 'ref_src', 'mc_cid', 'mc_eid'}
 AI_TERMS = ('artificial intelligence', ' ai ', 'chatgpt', 'gemini', 'notebooklm',
