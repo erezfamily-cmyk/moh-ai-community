@@ -71,9 +71,9 @@ def doctor() -> dict:
     return {"python": platform.python_version(), "os": platform.system(),
             "git": bool(shutil.which("git")), "ffmpeg": bool(shutil.which("ffmpeg")),
             "timezone": "Asia/Jerusalem", "timezone_status": tz_status,
-            "strict_free": True, "model_mode": "manual",
-            "network_fetch": "explicit_public_https", "generation": "not_implemented",
-            "note": "No credentials are read and no model or network calls are made."}
+            "strict_free": True, "model_mode": "ollama_local_optional",
+            "network_fetch": "explicit_public_https", "generation": "ollama_local_optional",
+            "note": "Doctor performs no model/network calls; production runs only against loopback Ollama."}
 
 
 def main(argv=None) -> int:
