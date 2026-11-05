@@ -36,6 +36,12 @@
       "title": "Geektime ישראל",
       "url": "https://www.geektime.co.il/feed/",
       "enabled": true
+    },
+    {
+      "id": "calcalist-israel",
+      "title": "כלכליסט — חדשות וטכנולוגיה",
+      "url": "https://www.calcalist.co.il/GeneralRSS/0,16335,L-8,00.xml",
+      "enabled": true
     }
   ]
 }
