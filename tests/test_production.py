@@ -35,6 +35,14 @@ class ProductionTests(unittest.TestCase):
         self.assertTrue(all(task['status'] == 'waiting' for task in snapshot['tasks']))
         self.assertNotIn('api_key', json.dumps(snapshot))
 
+    def test_local_model_can_save_generated_draft(self):
+        sentence = 'A clear explanation of artificial intelligence helps beginners understand tools.'
+        draft = editorial.save_draft(self.db, self.source['id'], sentence,
+                                     [{'claim_id': 'C1', 'sentence': sentence}],
+                                     origin='local_model')
+        self.assertEqual(draft['origin'] if 'origin' in draft else editorial.get_draft(self.db, draft['id'])['origin'],
+                         'local_model')
+
     def test_short_article_is_not_sent_to_model(self):
         source = editorial.save_pack(self.db, {
             'source': {'title': 'קצר', 'content': 'short', 'analysis_basis': 'full_text'},
