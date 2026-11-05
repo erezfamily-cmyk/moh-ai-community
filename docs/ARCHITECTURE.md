@@ -69,3 +69,14 @@ exports/                    # private by default
 ## הגנת מידע
 
 bind ל־127.0.0.1, אין remote scripts בתצוגת תוכן, escape ל־HTML, allowlist של קבצי יצוא. ב־fetch חסום כתובות private/link-local/loopback ו־file URLs, בדוק redirects ופתרון DNS מחדש כדי למנוע SSRF. exception מוגדר למודל המקומי בלבד; אין להשתמש ב־fetcher הציבורי לגישה אליו. הגבל גודל, timeout וסוג קובץ. בלי ביצוע קוד שמקורו בכתבה.
+
+
+## תזמור מקבילי של צוות התוכן — יעד המוצר
+
+הזרימה מתחלקת לשלושה סבבים מקביליים עם שערי תלות: (1) גילוי בין מקורות מאושרים, (2) לאחר יצירת evidence pack חתום — כתיבה, הוראה, התאמת ערוצים ועיצוב חזותי במקביל, (3) לאחר קבלת v1 — ביקורת עובדות, ביקורת עריכה וביקורת מדיה במקביל. Coordinator מחכה לכל הפלטים או timeout, מסמן כשל/חסר, מאחד ומקצה תיקונים. הוא אינו מניח שאייג׳נט שקט הצליח.
+
+כל משימת agent נשמרת עם `run_id`, `agent_id`, `task_id`, `evidence_pack_hash`, `input_version`, `status` (`queued/running/completed/failed/timed_out`), `output_path`, `started_at`, `completed_at` ו־`error_summary`. כל סבב פועל על גרסה קפואה של הראיות; שינוי מקור יוצר pack חדש ומבטל טיוטות תלויות.
+
+סטטוסים ברמת התוצר: `collecting → evidence_ready → parallel_drafting → parallel_review → needs_revision | ready_for_approval → approved → ready_to_publish → published_manually`. `approved` משויך לגרסת טקסט ול־checksums של כל נכסי המדיה. עריכה אחרי אישור מחזירה ל־`parallel_review`. `published_manually` דורש סימון תאריך/יעד על ידי המשתמש, ואינו מתיימר להעיד שהיישום פרסם דרך API.
+
+ה־UI מציג התקדמות לכל אייג׳נט בנפרד, ואינו ממתין בספינר כללי ללא פירוט. תוצרים זמניים אינם מוצגים כגמורים עד שחבילת החובה מוכנה. במקרה של חומרה מקומית מוגבלת אפשר להריץ את התפקידים בתור פנימי; רצף הפלטים והסטטוסים נשמר, ולא משנים את חוזה הפלט. כל מודל/רכיב חייב לעמוד במדיניות ללא תשלום ושימוש offline/localhost שנבחרה לפרויקט.
