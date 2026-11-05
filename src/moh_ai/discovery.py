@@ -41,6 +41,9 @@ APPROVED_FEEDS = {
     'geektime-israel': {'url': 'https://www.geektime.co.il/feed/',
                         'hosts': {'www.geektime.co.il', 'geektime.co.il'},
                         'article_hosts': {'www.geektime.co.il', 'geektime.co.il'}},
+    'calcalist-israel': {'url': 'https://www.calcalist.co.il/GeneralRSS/0,16335,L-8,00.xml',
+                         'hosts': {'www.calcalist.co.il', 'calcalist.co.il'},
+                         'article_hosts': {'www.calcalist.co.il', 'calcalist.co.il'}},
 }
 TRACKING = {'fbclid', 'gclid', 'dclid', 'trk', 'ref_src', 'mc_cid', 'mc_eid'}
 AI_TERMS = ('artificial intelligence', ' ai ', 'chatgpt', 'gemini', 'notebooklm',
