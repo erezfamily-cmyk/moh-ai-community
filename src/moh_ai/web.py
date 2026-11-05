@@ -117,6 +117,9 @@ def serve(db,port=8765,ready_callback=None,local_model=None):
     httpd=ThreadingHTTPServer(('127.0.0.1',port),Handler)
     if ready_callback:
         ready_callback(httpd)
-    else:print(f'מוח AI: http://127.0.0.1:{httpd.server_port} — מצב כתיבה ידני, ללא קריאות מודל',flush=True)
+    else:
+        status=production.local_model_status()
+        label=f"מודל מקומי מוכן: {status['configured_model']}" if status['status']=='ready' else 'ממתין להגדרת Ollama ומודל מקומי'
+        print(f'מוח AI: http://127.0.0.1:{httpd.server_port} — {label}; אין קריאות AI בענן',flush=True)
     try:httpd.serve_forever()
     finally:httpd.server_close()
