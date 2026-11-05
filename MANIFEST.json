@@ -116,7 +116,7 @@
   "src/moh_ai/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
   "src/moh_ai/cli.py": "4cac45d578ae768961a837c7725f8ed3f4d6538a1a641e8a22a59d0f7af149dd",
   "src/moh_ai/discovery.py": "ff87b2e96fec304072956b01745dd908a9f55bab02e7a6b8662aeefd173a95b3",
-  "src/moh_ai/editorial.py": "4bc1770479d4a912c4e3b54645a84ec8518e5f625ab24cab8c1ab70de8878792",
+  "src/moh_ai/editorial.py": "263b747746d38a0893e992784e3ec4d354df5af8a923e6f601eac623a5fa824f",
   "src/moh_ai/media.py": "3982c65b52448a06be2d87d4de7df465650f81261042f5b66cef84067dbd83c8",
   "src/moh_ai/pilot.py": "7e9180cf20d53b0a6ecf27282bb181b8bec472cabdb98ac0541e0031759bbfea",
   "src/moh_ai/production.py": "46bcb55e7c0a585b6c85fedd0ac9b26181c2453d01214cf5c1f27d690c31d195",
@@ -134,7 +134,7 @@
   "tests/test_discovery.py": "5e9aa90ad30304346fc8fc278fa5923e3b6c0b4be464531bddb1f5c8a4765a9a",
   "tests/test_editorial.py": "1bc07f6d731070c3a1b29b305fbbbf90eea2b4ffc6265c3b33a7c7e844713449",
   "tests/test_foundation.py": "60ac760389c59d4e660d655cc3ae3804970d5d7fe865d1e81485a40f9c3398ca",
-  "tests/test_production.py": "9984a99918f2c32bbfd7e2a067db92f0bd9d15aa3d7e2c2ca5dec3bb38792365",
+  "tests/test_production.py": "965bec12978493672df915fa474b9700b22018c877b2da780df906ab74d9f351",
   "tests/test_sources.py": "0ad080f86c31213863971918f9113b67d558c53e084d9e9d3bef14b76b0ca365",
   "tests/test_web.py": "6213e4bdf09208869e9c88db2dcb84b862f8b5593b6895efdb2dadc600a6e081"
 }
