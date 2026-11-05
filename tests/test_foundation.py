@@ -13,8 +13,8 @@ class FoundationTests(unittest.TestCase):
     def test_doctor_is_honest_and_does_not_expose_credentials(self):
         result = doctor()
         self.assertTrue(result["strict_free"])
-        self.assertEqual(result["generation"], "not_implemented")
-        self.assertEqual(result["model_mode"], "manual")
+        self.assertEqual(result["generation"], "ollama_local_optional")
+        self.assertEqual(result["model_mode"], "ollama_local_optional")
         self.assertNotIn("token", result)
 
     def test_import_preserves_hebrew_and_duplicate_is_idempotent(self):
