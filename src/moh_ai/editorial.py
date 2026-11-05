@@ -135,7 +135,6 @@ def save_draft(db,source_id,body,claim_map,origin='user_edit'):
     if pack['source']['analysis_basis']=='description_only':
         raise ValueError('description-only source cannot support a source-summary draft; supply full text or transcript')
     if origin not in {'user_edit','assistant_session','local_model'}:raise ValueError('invalid draft origin')
-    if origin=='local_model':raise ValueError('local model generation is not implemented')
     if not isinstance(claim_map,list) or len(claim_map)>50: raise ValueError('claim_map must be array')
     claims={x['id']:x for x in pack['claims']}
     if not claim_map: raise ValueError('at least one evidence mapping is required')
